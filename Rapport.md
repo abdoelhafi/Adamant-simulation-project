@@ -8,6 +8,86 @@ La sécurité est l’une des principales exigences de nos jours, les entreprise
 ## Chapitre 2 : Le chiffrement dans l'application Adamant.
 
 ### Partie 1 : chiffrement des Comptes
+**Résumé**
+
+Ce BIP décrit la mise en œuvre d'un code mnémonique ou d'une phrase mnémonique --
+un groupe de mots faciles à retenir -- pour la génération de portefeuilles déterministes.
+
+Il se compose de deux parties : générer le mnémonique et le convertir en un
+graine binaire. Cette graine peut être utilisée plus tard pour générer des portefeuilles déterministes en utilisant
+BIP-0032 ou des méthodes similaires.
+
+**Motivation**
+
+Un code mnémotechnique ou une phrase est supérieur pour l'interaction humaine par rapport au
+gestion des représentations binaires ou hexadécimales brutes d'une graine de portefeuille. le
+La phrase peut être écrite sur papier ou prononcée au téléphone.
+
+Ce guide est censé être un moyen de transporter le hasard généré par ordinateur avec
+une transcription lisible par l'homme. Ce n'est pas un moyen de traiter les créations par l'utilisateur
+phrases (également connues sous le nom de brainwallets) dans une graine de portefeuille.
+
+**Génération du mnémonique**
+
+Le mnémonique doit coder l'entropie dans un multiple de 32 bits. Avec plus d'entropie
+la sécurité est améliorée mais la durée de la peine augmente. Nous nous référons au
+longueur d'entropie initiale comme ENT. La taille autorisée de ENT est de 128 à 256 bits.
+
+Tout d'abord, une entropie initiale de bits ENT est générée. Une somme de contrôle est générée par
+prendre le premier 
+ORL / ​​.32
+bits de son hachage SHA256. Cette somme de contrôle est
+ajouté à la fin de l'entropie initiale. Ensuite, ces bits concaténés
+sont divisés en groupes de 11 bits, chacun codant un nombre de 0 à 2047, servant
+comme index dans une liste de mots. Enfin, nous convertissons ces nombres en mots et
+utiliser les mots joints comme une phrase mnémotechnique.
+
+Le tableau suivant décrit la relation entre l'entropie initiale
+longueur (ENT), la longueur de la somme de contrôle (CS) et la longueur du mnémonique généré
+phrase (MS) en mots.
+
+CS = ORL / ​​32
+MS = (ENT + CS) / 11
+
+| ORL | CS | ORL+CS | MS |
+|-------|----|--------|------|
+| 128 | 4 | 132 | 12 |
+| 160 | 5 | 165 | 15 |
+| 192 | 6 | 198 | 18 |
+| 224 | 7 | 231 | 21 |
+| 256 | 8 | 264 | 24 |
+
+
+**Liste de mots**
+
+Une liste de mots idéale a les caractéristiques suivantes :
+
+a) sélection intelligente de mots
+> - la liste de mots est créée de telle manière qu'il suffit de taper les quatre premiers 
+  lettres pour identifier sans ambiguïté le mot
+
+b) mots similaires évités
+   - des paires de mots comme « construire » et « construire », « femme » et « femmes », ou « rapidement » et « rapidement »
+     non seulement rendent la mémorisation de la phrase difficile, mais sont également plus d'erreurs
+     sujettes et plus difficiles à deviner
+
+c) listes de mots triées
+   - la liste de mots est triée, ce qui permet une recherche plus efficace des mots de code
+     (c'est-à-dire que les implémentations peuvent utiliser la recherche binaire au lieu de la recherche linéaire)
+   - cela permet également d'utiliser trie (une arborescence de préfixes), par exemple pour une meilleure compression
+
+La liste de mots peut contenir des caractères natifs, mais ils doivent être encodés en UTF-8
+en utilisant la décomposition de compatibilité de forme de normalisation (NFKD).
+**Listes de mots**
+
+Étant donné que la grande majorité des portefeuilles BIP39 ne prend en charge que la liste de mots anglais,
+il est '''fortement déconseillé''' d'utiliser des listes de mots non anglais pour générer
+les phrases mnémotechniques.
+
+Si vous pensez toujours que votre application a vraiment besoin d'utiliser une liste de mots localisée,
+utilisez l'un des éléments suivants au lieu d'inventer le vôtre.
+
+[[bip-0039/bip-0039-wordlists.md|Listes de mots]]
 
 
 ### Partie 2 : chiffrement des Messages
