@@ -87,7 +87,7 @@ les phrases mnémotechniques.
 Si vous pensez toujours que votre application a vraiment besoin d'utiliser une liste de mots localisée,
 utilisez l'un des éléments suivants au lieu d'inventer le vôtre.
 
-[[bip-0039/bip-0039-wordlists.md|Listes de mots]]
+[Listes des mots](https://github.com/bitcoin/bips/blob/master/bip-0039/bip-0039-wordlists.md)
 
 
 ### Partie 2 : chiffrement des Messages
